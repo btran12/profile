@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bao Tran — Software Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0d0d0d;
+    --cream: #f5f0e8;
+    --rust: #c44b2b;
+    --gold: #b8962e;
+    --mid: #5a5a5a;
+    --light: #e8e2d8;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 200px;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    min-height: 60vh;
+    position: relative;
+    border-bottom: 1px solid var(--light);
+  }
+
+  .hero-left {
+    padding: 100px 80px 80px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    max-width: 900px;
+  }
+
+  .eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.1s forwards;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 7vw, 92px);
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.25s forwards;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--rust);
+  }
+
+  .tagline {
+    margin-top: 36px;
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--mid);
+    max-width: 420px;
+    line-height: 1.65;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s forwards;
+  }
+
+  .contact-strip {
+    margin-top: 52px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.55s forwards;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--mid);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .contact-item:hover { color: var(--rust); }
+
+  .contact-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--rust);
+    flex-shrink: 0;
+  }
+
+
+
+  /* ── MAIN CONTENT ── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 100px 60px;
+  }
+
+  .section {
+    margin-bottom: 90px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+
+  .section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .section-label span {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--rust);
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--light);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    margin-bottom: 48px;
+  }
+
+  /* ── SKILLS ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--light);
+  }
+
+  .skill-block {
+    background: var(--cream);
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: background 0.3s;
+  }
+
+  .skill-block:hover { background: #ede7db; }
+
+  .skill-block::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--rust);
+    transform: scaleY(0);
+    transition: transform 0.3s;
+    transform-origin: bottom;
+  }
+
+  .skill-block:hover::before { transform: scaleY(1); }
+
+  .skill-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .skill-level {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* ── EXPERIENCE ── */
+  .exp-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0 48px;
+    margin-bottom: 56px;
+    padding-bottom: 56px;
+    border-bottom: 1px solid var(--light);
+    position: relative;
+  }
+
+  .exp-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .exp-meta {
+    padding-top: 4px;
+  }
+
+  .exp-company {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+    color: var(--rust);
+    margin-bottom: 8px;
+    line-height: 1.1;
+  }
+
+  .exp-duration {
+    font-size: 12px;
+    color: var(--mid);
+    line-height: 1.5;
+  }
+
+  .exp-content {}
+
+  .exp-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    line-height: 1.1;
+  }
+
+  .exp-desc {
+    font-size: 14.5px;
+    font-weight: 300;
+    color: var(--mid);
+    line-height: 1.75;
+  }
+
+  .exp-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .exp-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mid);
+    border: 1px solid var(--light);
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+
+  /* ── EDUCATION ── */
+  .edu-block {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+    padding: 36px;
+    background: var(--ink);
+    color: var(--cream);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .edu-block::before {
+    content: '"';
+    position: absolute;
+    right: -10px; top: -30px;
+    font-family: 'Playfair Display', serif;
+    font-size: 200px;
+    color: rgba(245,240,232,0.04);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .edu-icon {
+    width: 56px; height: 56px;
+    border: 1px solid rgba(245,240,232,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--gold);
+  }
+
+  .edu-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .edu-info p {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(245,240,232,0.6);
+    line-height: 1.6;
+  }
+
+  /* ── LANGUAGES ── */
+  .lang-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--light);
+  }
+
+  .lang-row:last-child { border-bottom: none; }
+
+  .lang-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    min-width: 130px;
+  }
+
+  .lang-bar {
+    flex: 1;
+    height: 2px;
+    background: var(--light);
+    position: relative;
+  }
+
+  .lang-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--rust);
+    transition: width 1s ease;
+  }
+
+  .lang-level {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mid);
+    min-width: 140px;
+    text-align: right;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--light);
+    padding: 40px 60px;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer p {
+    font-size: 12px;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+  }
+
+  footer .f-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--rust);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-left { padding: 60px 32px; }
+    main { padding: 60px 32px; }
+    .exp-item { grid-template-columns: 1fr; gap: 12px; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-left">
+    <p class="eyebrow">Software Engineer &amp; Architect</p>
+    <h1>Bao<br><em>Tran</em></h1>
+    <p class="tagline">
+      Building scalable healthcare software at Solventum. 
+      Ten years of turning complex requirements into elegant, 
+      performant systems across Java, React, Angular, and AWS.
+    </p>
+    <div class="contact-strip">
+      <a class="contact-item" href="https://linkedin.com/in/baoqtran" target="_blank">
+        <span class="contact-dot"></span>linkedin.com/in/baoqtran
+      </a>
+      <a class="contact-item" href="https://github.com/btran12" target="_blank">
+        <span class="contact-dot"></span>github.com/btran12
+      </a>
+      <span class="contact-item">
+        <span class="contact-dot"></span>Middletown, CT
+      </span>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main>
+
+  <!-- SKILLS -->
+  <section class="section">
+    <div class="section-label"><span>Expertise</span></div>
+    <h2 class="section-title">Core Skills</h2>
+    <div class="skills-grid">
+      <div class="skill-block">
+        <div class="skill-name">Java</div>
+        <div class="skill-level">Expert</div>
+      </div>
+      <div class="skill-block">
+        <div class="skill-name">React / Angular</div>
+        <div class="skill-level">Expert</div>
+      </div>
+      <div class="skill-block">
+        <div class="skill-name">AWS Serverless</div>
+        <div class="skill-level">Expert</div>
+      </div>
+      <div class="skill-block">
+        <div class="skill-name">Microservices</div>
+        <div class="skill-level">Advanced</div>
+      </div>
+      <div class="skill-block">
+        <div class="skill-name">CI/CD Pipelines</div>
+        <div class="skill-level">Advanced</div>
+      </div>
+      <div class="skill-block">
+        <div class="skill-name">Leadership</div>
+        <div class="skill-level">Senior</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section class="section">
+    <div class="section-label"><span>Career</span></div>
+    <h2 class="section-title">Experience</h2>
+
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-company">Solventum</div>
+        <div class="exp-duration">Aug 2024 – Present<br>2 years</div>
+      </div>
+      <div class="exp-content">
+        <h3 class="exp-title">Software Development Specialist</h3>
+        <p class="exp-desc">
+          Designing and architecting serverless microservices using AWS Lambda, S3 and API Gateway. 
+          Leading the team's effort to improve CI/CD processes and driving technical direction 
+          after the separation from 3M Healthcare.
+        </p>
+        <div class="exp-tags">
+          <span class="exp-tag">AWS Lambda</span>
+          <span class="exp-tag">API Gateway</span>
+          <span class="exp-tag">S3</span>
+          <span class="exp-tag">CI/CD</span>
+          <span class="exp-tag">Microservices</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-company">3M</div>
+        <div class="exp-duration">Nov 2021 – Mar 2024<br>2 yrs 5 mos</div>
+      </div>
+      <div class="exp-content">
+        <h3 class="exp-title">Senior Software Engineer</h3>
+        <p class="exp-desc">
+          Architected and implemented scalable, performant, and secure software solutions. 
+          Collaborated with global subsidiaries in Australia, Canada, UAE, and the UK on cyclical 
+          requirement changes. Led daily standups and weekly cross-team engineering collaboration sessions. 
+          Mentored engineers and conducted code reviews to ensure best practices.
+        </p>
+        <div class="exp-tags">
+          <span class="exp-tag">Java</span>
+          <span class="exp-tag">React</span>
+          <span class="exp-tag">Angular</span>
+          <span class="exp-tag">AWS</span>
+          <span class="exp-tag">Team Lead</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-company">3M</div>
+        <div class="exp-duration">Aug 2019 – Nov 2021<br>2 yrs 4 mos</div>
+      </div>
+      <div class="exp-content">
+        <h3 class="exp-title">Advanced Software Engineer</h3>
+        <p class="exp-desc">
+          Led developer on international and domestic projects. Facilitated the development of medical 
+          coding, grouping and billing software. Built and supported web applications written in ReactJS 
+          and AngularJS. Mentored new engineers and provided training to interns.
+        </p>
+        <div class="exp-tags">
+          <span class="exp-tag">ReactJS</span>
+          <span class="exp-tag">AngularJS</span>
+          <span class="exp-tag">Medical Coding</span>
+          <span class="exp-tag">Mentorship</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-company">3M</div>
+        <div class="exp-duration">Feb 2017 – Aug 2019<br>2 yrs 7 mos</div>
+      </div>
+      <div class="exp-content">
+        <h3 class="exp-title">Software Engineer</h3>
+        <p class="exp-desc">
+          Maintained and improved existing software. Developed collaboration tools to support 
+          the development of component libraries. Leveraged AWS and cloud tools to develop 
+          and maintain web services. Mentored new interns.
+        </p>
+        <div class="exp-tags">
+          <span class="exp-tag">AWS</span>
+          <span class="exp-tag">Web Services</span>
+          <span class="exp-tag">Component Libraries</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-meta">
+        <div class="exp-company">3M (Internship)</div>
+        <div class="exp-duration">May 2016 – Sep 2016<br>5 months</div>
+      </div>
+      <div class="exp-content">
+        <h3 class="exp-title">Software Engineering Intern</h3>
+        <p class="exp-desc">
+          Cooperated with software engineers, database engineers, and clinical analysts to integrate 
+          new features into internal Java web applications. Worked in an agile environment to 
+          continuously deliver features to product owners.
+        </p>
+        <div class="exp-tags">
+          <span class="exp-tag">Java</span>
+          <span class="exp-tag">Agile</span>
+          <span class="exp-tag">Wallingford, CT</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- EDUCATION -->
+  <section class="section">
+    <div class="section-label"><span>Education</span></div>
+    <h2 class="section-title">Academic Background</h2>
+    <div class="edu-block">
+      <div class="edu-icon">BS</div>
+      <div class="edu-info">
+        <h3>Bachelor of Science in Computer Science</h3>
+        <p>Westfield State University &nbsp;·&nbsp; 2013 – 2016</p>
+      </div>
+    </div>
+  </section>
+
+
+</main>
+
+<footer>
+  <p>© 2024 Bao Tran &nbsp;·&nbsp; Software Engineer</p>
+  <div class="f-mark">BT</div>
+</footer>
+
+<script>
+  // Intersection observer for scroll reveals
+  const sections = document.querySelectorAll('.section');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
